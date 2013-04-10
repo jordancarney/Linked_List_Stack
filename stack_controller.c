@@ -93,6 +93,7 @@ int evaluatePostfix(char *postfixStr) {
         val--;
         sum+=(y * continuous_digits[j]);
       }
+
       sum_value = (char *)malloc(sizeof(char *) * count);
       snprintf(sum_value, sizeof(sum_value), "%d", sum);
       stackPush(s, sum_value);
@@ -136,7 +137,7 @@ int evaluatePostfix(char *postfixStr) {
       val = (char *)malloc(sizeof(char *));
       snprintf(val, sizeof(val), "%d", total);
 
-      stackPush(s, val);
+      stackPush(s,val);
     }
   }
 
@@ -145,6 +146,8 @@ int evaluatePostfix(char *postfixStr) {
   free(result_string);
 
   stackDestroy(s);
+  free(s);
+  // free(val);
 
   return result;
 }
@@ -246,8 +249,8 @@ char *infixToPostfix(char *infixStr) {
     char *ptr = (char *)malloc(sizeof(char *) * strlen(postfix));
     ptr = strcpy(ptr, postfix);
     snprintf(postfix, sizeof(postfix), "%s%c ", ptr, poppedElement[0]);
+    free(ptr);
 
-    //added
     free(poppedElement);
   }
 
@@ -256,8 +259,8 @@ char *infixToPostfix(char *infixStr) {
   char *postfixStr = (char *)malloc(sizeof(char *) * strlen(postfix));
   strcpy(postfixStr, postfix);
 
-  //free(element);
   stackDestroy(s);
+  free(s);
 
   return postfixStr;
 }
@@ -348,44 +351,16 @@ void stackPush(stack *stkPtr, stkElement element) {
 }
 
 void stackDestroy(stack *stkPtr) {
-  /* old stack destroy */
-
-  // int i, length = stackLength(stkPtr);
-  // stkNode *node = stkPtr->top;
-
-  // if (length == 0) {
-  //   if (stkPtr->top != NULL) free(stkPtr->top);
-  //   free(stkPtr);
-  //   return;
-  // } else if (length == 1) {
-  //   free(node->element);
-  //   free(node);
-  //   free(stkPtr);
-  //   return;
-  // }
-
-  // for (i = 0; i < length - 1; i++) {
-  //   stkNode *nextNode = (stkNode *)node->next;
-  //   free(node->next);
-  //   free(node->element);
-  //   free(node);
-  //   node = nextNode;
-  // }
-
-  // free(stkPtr->top);
-  // free(stkPtr);
-
-    /* new stack destroy */
     stkNode *node = stkPtr->top;
 
     while (node) {
       stkNode *next_node = (stkNode *)node->next;
-      free(node->element);
+      //free(node->element);
       free(node);
       node = next_node;
     }
 
-    free(stkPtr);
+    //free(stkPtr);
 }
 
 void stackInit(stack *stkPtr) {
